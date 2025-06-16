@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Odliczanie do knocenia na Malcie!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Fredoka One', cursive;
+      background: linear-gradient(to bottom, #ffe066, #ffa502);
+      color: #fff;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 1;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      padding: 20px;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 10px;
+    }
+
+    .countdown {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .countdown-item {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      padding: 20px;
+      min-width: 80px;
+    }
+
+    .countdown-item span {
+      display: block;
+      font-size: 2rem;
+    }
+
+    .emoji {
+      font-size: 2rem;
+      margin-top: 10px;
+      animation: bounce 1.5s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2rem;
+      }
+      .countdown-item span {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <div class="content">
+    <h1>Odliczanie do knocenia na Malcie! 🏖️🍻</h1>
+    <div class="countdown" id="countdown">
+      <div class="countdown-item">
+        <span id="days">0</span>Dni
+      </div>
+      <div class="countdown-item">
+        <span id="hours">0</span>Godz
+      </div>
+      <div class="countdown-item">
+        <span id="minutes">0</span>Min
+      </div>
+      <div class="countdown-item">
+        <span id="seconds">0</span>Sek
+      </div>
+    </div>
+    <div class="emoji">🍺🌴🌞🎉🎂</div>
+  </div>
+
+  <script>
+    const targetDate = new Date("2025-09-05T19:15:00").getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = targetDate - now;
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      document.getElementById("days").textContent = days;
+      document.getElementById("hours").textContent = hours;
+      document.getElementById("minutes").textContent = minutes;
+      document.getElementById("seconds").textContent = seconds;
+
+      if (distance < 0) {
+        document.getElementById("countdown").innerHTML = "Czas na imprezę! 🎊🍹";
+      }
+    }
+
+    setInterval(updateCountdown, 1000);
+  </script>
+</body>
+</html>
