@@ -21,6 +21,7 @@
       background-size: cover;
       background-position: center;
       position: relative;
+      overflow: hidden;
     }
 
     .overlay {
@@ -34,11 +35,17 @@
       position: relative;
       z-index: 2;
       padding: 20px;
+      animation: fadeIn 2s ease-in-out;
     }
 
     h1 {
       font-size: 3rem;
       margin-bottom: 10px;
+      animation: slideIn 2s ease-in-out;
+    }
+
+    .countdown-container {
+      margin-bottom: 30px;
     }
 
     .countdown {
@@ -46,6 +53,7 @@
       gap: 15px;
       justify-content: center;
       flex-wrap: wrap;
+      margin-top: 10px;
     }
 
     .countdown-item {
@@ -53,6 +61,13 @@
       border-radius: 10px;
       padding: 20px;
       min-width: 80px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      transition: transform 0.3s;
+      animation: pulse 2s infinite;
+    }
+
+    .countdown-item:hover {
+      transform: scale(1.1);
     }
 
     .countdown-item span {
@@ -66,9 +81,43 @@
       animation: bounce 1.5s infinite;
     }
 
+    .decorations {
+      position: absolute;
+      z-index: 0;
+    }
+    .decoration {
+      position: absolute;
+      animation: float 6s ease-in-out infinite;
+      opacity: 0.8;
+    }
+
+    .decoration img {
+      width: 80px;
+    }
+
     @keyframes bounce {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
     }
 
     @media (max-width: 600px) {
@@ -82,45 +131,89 @@
   </style>
 </head>
 <body>
+
+  <div class="decorations">
+    <div class="decoration" style="top:10%; left:5%;"><img src="https://cdn-icons-png.flaticon.com/512/415/415733.png"></div>
+    <div class="decoration" style="top:15%; right:5%;"><img src="https://cdn-icons-png.flaticon.com/512/1146/1146869.png"></div>
+    <div class="decoration" style="bottom:10%; left:15%;"><img src="https://cdn-icons-png.flaticon.com/512/869/869869.png"></div>
+  </div>
+
   <div class="overlay"></div>
   <div class="content">
-    <h1>Odliczanie do knocenia na Malcie! 🏖️🍻</h1>
-    <div class="countdown" id="countdown">
-      <div class="countdown-item">
-        <span id="days">0</span>Dni
-      </div>
-      <div class="countdown-item">
-        <span id="hours">0</span>Godz
-      </div>
-      <div class="countdown-item">
-        <span id="minutes">0</span>Min
-      </div>
-      <div class="countdown-item">
-        <span id="seconds">0</span>Sek
+    <div class="countdown-container">
+      <h1>Odliczanie do bradziażenia w Stambule! 🏝️🍹</h1>
+      <div class="countdown" id="stambul-countdown">
+        <div class="countdown-item">
+          <span id="v-days">0</span>Dni
+        </div>
+        <div class="countdown-item">
+          <span id="v-hours">0</span>Godz
+        </div>
+        <div class="countdown-item">
+          <span id="v-minutes">0</span>Min
+        </div>
+        <div class="countdown-item">
+          <span id="v-seconds">0</span>Sek
+        </div>
       </div>
     </div>
+
+    <div class="countdown-container">
+      <h1>Odliczanie do knocenia na Malcie! 🏖️🍻</h1>
+      <div class="countdown" id="malta-countdown">
+        <div class="countdown-item">
+          <span id="days">0</span>Dni
+        </div>
+        <div class="countdown-item">
+          <span id="hours">0</span>Godz
+        </div>
+        <div class="countdown-item">
+          <span id="minutes">0</span>Min
+        </div>
+        <div class="countdown-item">
+          <span id="seconds">0</span>Sek
+        </div>
+      </div>
+    </div>
+
     <div class="emoji">🍺🌴🌞🎉🎂</div>
   </div>
 
   <script>
-    const targetDate = new Date("2025-09-05T19:15:00").getTime();
+    const stambulDate = new Date("2025-08-07T14:10:00").getTime();
+    const maltaDate = new Date("2025-09-05T19:15:00").getTime();
 
     function updateCountdown() {
       const now = new Date().getTime();
-      const distance = targetDate - now;
 
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      const update = (distance, ids) => {
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      document.getElementById("days").textContent = days;
-      document.getElementById("hours").textContent = hours;
-      document.getElementById("minutes").textContent = minutes;
-      document.getElementById("seconds").textContent = seconds;
+        document.getElementById(ids.days).textContent = days;
+        document.getElementById(ids.hours).textContent = hours;
+        document.getElementById(ids.minutes).textContent = minutes;
+        document.getElementById(ids.seconds).textContent = seconds;
+      };
 
-      if (distance < 0) {
-        document.getElementById("countdown").innerHTML = "Czas na imprezę! 🎊🍹";
+      const stambulDistance = stambulDate - now;
+      if (stambulDistance >= 0) {
+        update(stambulDistance, {
+          days: "v-days", hours: "v-hours", minutes: "v-minutes", seconds: "v-seconds"
+        });
+      } else {
+        document.getElementById("stambul-countdown").innerHTML = "Wakacje rozpoczęte! 🌞🌴🍹";
+      }
+
+      const maltaDistance = maltaDate - now;
+      if (maltaDistance >= 0) {
+        update(maltaDistance, {
+          days: "days", hours: "hours", minutes: "minutes", seconds: "seconds"
+        });
+      } else {
+        document.getElementById("malta-countdown").innerHTML = "Czas na imprezę na Malcie! 🎊🍻";
       }
     }
 
